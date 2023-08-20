@@ -1,0 +1,71 @@
+.app {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background: rgb(2, 0, 36);
+  background: linear-gradient(
+    90deg,
+    rgba(2, 0, 36, 1) 0%,
+    rgba(17, 17, 167, 1) 34%,
+    rgba(19, 156, 184, 1) 100%
+  );
+  color: #a9a9a9;
+
+  h1 {
+    text-align: center;
+  }
+
+  .calendar {
+    margin-top: 20px;
+  }
+
+  h2 {
+    margin-bottom: 10px;
+  }
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+
+  .event {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+
+    .event-date {
+      margin-right: 10px;
+    }
+
+    .event-title {
+      flex-grow: 1;
+    }
+  }
+
+  .event-form {
+    margin-top: 20px;
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input {
+      width: 100%;
+      padding: 5px;
+      margin-bottom: 10px;
+    }
+
+    button {
+      padding: 5px 10px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+
+      &:hover {
+        background-color: #0056b3;
+      }
+    }
+  }
+}
