@@ -1,8 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import Event from './Event';
 
-const Calendar = ({ events, onDelete }) => {
+const getRandomColor = () => {
+  // Generate a random pastel color
+  const hue = Math.floor(Math.random() * 360); // Random hue value
+  const pastelColor = `hsl(${hue}, 80%, 70%)`; // Lower saturation and brightness
+
+  return pastelColor;
+};
+
+const getColorFromLocalStorage = (eventId) => {
+  const storedColor = localStorage.getItem(`eventColor_${eventId}`);
+  return storedColor || getRandomColor();
+};
+
+const setColorToLocalStorage = (eventId, color) => {
+  localStorage.setItem(`eventColor_${eventId}`, color);
+};
+
+const Calendar = ({ events, onDelete, onEdit }) => {
   const [currentTime, setCurrentTime] = useState(new Date());
 
   const currentYear = currentTime.getFullYear();
@@ -34,6 +51,16 @@ const Calendar = ({ events, onDelete }) => {
     return 'Событие уже прошло';
   };
 
+  // Generate random colors once using useMemo
+  const eventColors = useMemo(() => {
+    return events.reduce((acc, event) => {
+      const storedColor = getColorFromLocalStorage(event.id);
+      acc[event.id] = storedColor;
+      setColorToLocalStorage(event.id, storedColor);
+      return acc;
+    }, {});
+  }, [events]);
+
   return (
     <div className="calendar">
       <div className="current-time">
@@ -45,12 +72,13 @@ const Calendar = ({ events, onDelete }) => {
         <p>Нет запланированных событий</p>
       ) : (
         <ul>
-          {events.map((event) => (
-            <li key={event.id}>
-              <Event event={event} onDelete={onDelete} />
-              <div className="event-time-remaining">{getTimeRemaining(event.date)}</div>
-            </li>
-          ))}
+           {events.map((event) => (
+           <li key={event.id} style={{ background: eventColors[event.id] }} className="calendar-event">
+    <Event event={event} onDelete={onDelete} onEdit={onEdit} />
+    <div className="event-time-remaining">{getTimeRemaining(event.date)}</div>
+  </li>
+))}
+
         </ul>
       )}
     </div>
